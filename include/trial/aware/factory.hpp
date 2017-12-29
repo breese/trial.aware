@@ -3,14 +3,13 @@
 
 #include <memory>
 #include <boost/asio/io_service.hpp>
+#include <trial/aware/announce_socket.hpp>
+#include <trial/aware/monitor_socket.hpp>
 
 namespace trial
 {
 namespace aware
 {
-
-class announce_socket;
-class monitor_socket;
 
 class factory
 {

@@ -12,8 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/aware/factory.hpp>
-#include <trial/aware/announce_socket.hpp>
-#include <trial/aware/monitor_socket.hpp>
 
 namespace trial
 {
