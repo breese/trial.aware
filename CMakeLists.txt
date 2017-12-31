@@ -40,7 +40,7 @@ find_package(Boost 1.55.0 REQUIRED QUIET COMPONENTS system)
 
 if (WITH_DNSSD)
   find_package(DNSSD REQUIRED)
-  if (TARGET DNSSD::Avahi)
+  if (TARGET PkgConfig::Avahi)
     message(STATUS "DNS-SD backend: Avahi")
   elseif (TARGET DNSSD::mDNSResponder)
     message(STATUS "DNS-SD backend: mDNSResponder")
