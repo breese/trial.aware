@@ -14,7 +14,7 @@
 #include <string>
 #include <boost/system/error_code.hpp>
 #include <trial/aware/contact.hpp>
-#include "mdns/handle.hpp"
+#include "dnssd/mdns/handle.hpp"
 
 namespace trial
 {

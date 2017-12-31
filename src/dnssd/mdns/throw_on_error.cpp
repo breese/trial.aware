@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/system/system_error.hpp>
-#include "mdns/error.hpp"
-#include "mdns/throw_on_error.hpp"
+#include "dnssd/mdns/error.hpp"
+#include "dnssd/mdns/throw_on_error.hpp"
 
 namespace trial
 {

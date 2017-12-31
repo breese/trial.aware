@@ -10,10 +10,10 @@
 
 #include <cassert>
 #include <functional>
-#include "mdns/dns_sd.hpp"
-#include "mdns/error.hpp"
-#include "mdns/monitor.hpp"
-#include "mdns/monitor_socket.hpp"
+#include "dnssd/mdns/dns_sd.hpp"
+#include "dnssd/mdns/error.hpp"
+#include "dnssd/mdns/monitor.hpp"
+#include "dnssd/mdns/monitor_socket.hpp"
 
 namespace trial
 {

@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/aware/dnssd/factory.hpp>
-#include "avahi/announce_socket.hpp"
-#include "avahi/monitor_socket.hpp"
+#include "dnssd/avahi/announce_socket.hpp"
+#include "dnssd/avahi/monitor_socket.hpp"
 
 namespace trial
 {

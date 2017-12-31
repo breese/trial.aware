@@ -9,8 +9,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <trial/aware/dnssd/factory.hpp>
-#include "mdns/announce_socket.hpp"
-#include "mdns/monitor_socket.hpp"
+#include "dnssd/mdns/announce_socket.hpp"
+#include "dnssd/mdns/monitor_socket.hpp"
 
 namespace trial
 {

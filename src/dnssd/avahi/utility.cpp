@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstring>
-#include "avahi/utility.hpp"
+#include "dnssd/avahi/utility.hpp"
 
 namespace trial
 {

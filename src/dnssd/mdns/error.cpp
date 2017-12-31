@@ -8,8 +8,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "mdns/dns_sd.hpp"
-#include "mdns/error.hpp"
+#include "dnssd/mdns/dns_sd.hpp"
+#include "dnssd/mdns/error.hpp"
 
 namespace
 {

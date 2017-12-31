@@ -16,7 +16,7 @@
 #include <boost/asio/io_service.hpp>
 #include <avahi-common/timeval.h>
 #include "native_socket.hpp"
-#include "avahi/poller.hpp"
+#include "dnssd/avahi/poller.hpp"
 
 using namespace trial::aware;
 

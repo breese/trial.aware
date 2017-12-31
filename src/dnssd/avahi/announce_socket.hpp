@@ -13,8 +13,8 @@
 
 #include <boost/asio/basic_io_object.hpp>
 #include <trial/aware/announce_socket.hpp>
-#include "avahi/service.hpp"
-#include "avahi/announcer.hpp"
+#include "dnssd/avahi/service.hpp"
+#include "dnssd/avahi/announcer.hpp"
 
 namespace trial
 {

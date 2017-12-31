@@ -12,9 +12,9 @@
 #include <avahi-common/error.h>
 #include <avahi-client/client.h>
 #include <boost/system/system_error.hpp>
-#include "avahi/error.hpp"
-#include "avahi/poller.hpp"
-#include "avahi/client.hpp"
+#include "dnssd/avahi/error.hpp"
+#include "dnssd/avahi/poller.hpp"
+#include "dnssd/avahi/client.hpp"
 
 namespace trial
 {

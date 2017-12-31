@@ -13,10 +13,10 @@
 #include <avahi-client/lookup.h>
 #include <boost/system/system_error.hpp>
 #include <boost/asio.hpp>
-#include "avahi/error.hpp"
-#include "avahi/utility.hpp"
-#include "avahi/client.hpp"
-#include "avahi/browser.hpp"
+#include "dnssd/avahi/error.hpp"
+#include "dnssd/avahi/utility.hpp"
+#include "dnssd/avahi/client.hpp"
+#include "dnssd/avahi/browser.hpp"
 
 namespace trial
 {

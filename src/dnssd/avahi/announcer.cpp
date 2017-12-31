@@ -16,10 +16,10 @@
 #include <avahi-common/malloc.h>
 #include <avahi-client/publish.h>
 #include <avahi-client/client.h>
-#include "avahi/utility.hpp"
-#include "avahi/error.hpp"
-#include "avahi/client.hpp"
-#include "avahi/announcer.hpp"
+#include "dnssd/avahi/utility.hpp"
+#include "dnssd/avahi/error.hpp"
+#include "dnssd/avahi/client.hpp"
+#include "dnssd/avahi/announcer.hpp"
 
 namespace trial
 {

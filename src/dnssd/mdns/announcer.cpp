@@ -14,12 +14,12 @@
 #include <functional>
 #include <boost/asio/placeholders.hpp>
 #include <boost/utility/in_place_factory.hpp>
-#include "mdns/dns_sd.hpp"
-#include "mdns/error.hpp"
-#include "mdns/throw_on_error.hpp"
-#include "mdns/utility.hpp"
-#include "mdns/properties.hpp"
-#include "mdns/announcer.hpp"
+#include "dnssd/mdns/dns_sd.hpp"
+#include "dnssd/mdns/error.hpp"
+#include "dnssd/mdns/throw_on_error.hpp"
+#include "dnssd/mdns/utility.hpp"
+#include "dnssd/mdns/properties.hpp"
+#include "dnssd/mdns/announcer.hpp"
 
 namespace trial
 {

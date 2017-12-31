@@ -8,7 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "avahi/announce_socket.hpp"
+#include "dnssd/avahi/announce_socket.hpp"
 
 namespace trial
 {

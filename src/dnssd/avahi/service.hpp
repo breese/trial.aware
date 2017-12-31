@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/asio/io_service.hpp>
-#include "avahi/poller.hpp"
-#include "avahi/client.hpp"
+#include "dnssd/avahi/poller.hpp"
+#include "dnssd/avahi/client.hpp"
 
 namespace trial
 {

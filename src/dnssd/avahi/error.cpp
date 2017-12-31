@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <avahi-common/error.h>
-#include "avahi/error.hpp"
+#include "dnssd/avahi/error.hpp"
 
 namespace
 {

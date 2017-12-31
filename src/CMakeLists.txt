@@ -11,7 +11,7 @@ add_library(aware
 target_compile_options(aware PRIVATE ${TRIAL_AWARE_WARNING_FLAGS})
 target_link_libraries(aware Boost::system)
 
-include_directories(aware BEFORE PRIVATE .)
+target_include_directories(aware BEFORE PRIVATE .)
 
 ###############################################################################
 # DNS-SD
@@ -32,7 +32,6 @@ if (TARGET PkgConfig::Avahi)
     dnssd/avahi/utility.cpp
     )
 
-  target_include_directories(aware BEFORE PRIVATE dnssd)
   target_link_libraries(aware PkgConfig::Avahi)
 
 elseif (TARGET DNSSD::mDNSResponder)
@@ -53,7 +52,6 @@ elseif (TARGET DNSSD::mDNSResponder)
     dnssd/mdns/utility.cpp
     )
 
-  target_include_directories(aware BEFORE PRIVATE dnssd)
   target_link_libraries(aware DNSSD::mDNSResponder)
 
 endif()

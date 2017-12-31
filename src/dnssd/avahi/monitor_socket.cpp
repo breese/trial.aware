@@ -13,8 +13,8 @@
 #include <queue>
 #include <functional>
 #include <utility> // std::pair
-#include "avahi/browser.hpp"
-#include "avahi/monitor_socket.hpp"
+#include "dnssd/avahi/browser.hpp"
+#include "dnssd/avahi/monitor_socket.hpp"
 
 namespace trial
 {

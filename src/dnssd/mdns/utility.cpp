@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cstring>
-#include "mdns/utility.hpp"
+#include "dnssd/mdns/utility.hpp"
 
 namespace trial
 {

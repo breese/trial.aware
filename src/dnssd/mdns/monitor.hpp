@@ -21,9 +21,9 @@
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <trial/aware/contact.hpp>
 #include <trial/aware/monitor_socket.hpp>
-#include "mdns/handle.hpp"
-#include "mdns/browser.hpp"
-#include "mdns/resolver.hpp"
+#include "dnssd/mdns/handle.hpp"
+#include "dnssd/mdns/browser.hpp"
+#include "dnssd/mdns/resolver.hpp"
 
 namespace trial
 {

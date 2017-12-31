@@ -14,7 +14,7 @@
 #include <memory>
 #include <boost/asio/io_service.hpp>
 #include "native_socket.hpp"
-#include "mdns/handle.hpp"
+#include "dnssd/mdns/handle.hpp"
 
 namespace trial
 {

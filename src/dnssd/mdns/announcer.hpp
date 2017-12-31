@@ -15,8 +15,8 @@
 #include <boost/optional.hpp>
 #include <trial/aware/contact.hpp>
 #include <trial/aware/announce_socket.hpp>
-#include "mdns/handle.hpp"
-#include "mdns/properties.hpp"
+#include "dnssd/mdns/handle.hpp"
+#include "dnssd/mdns/properties.hpp"
 
 namespace trial
 {

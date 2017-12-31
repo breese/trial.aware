@@ -10,9 +10,9 @@
 
 #include <cassert>
 #include <type_traits>
-#include "mdns/dns_sd.hpp"
-#include "mdns/throw_on_error.hpp"
-#include "mdns/handle.hpp"
+#include "dnssd/mdns/dns_sd.hpp"
+#include "dnssd/mdns/throw_on_error.hpp"
+#include "dnssd/mdns/handle.hpp"
 
 namespace trial
 {
