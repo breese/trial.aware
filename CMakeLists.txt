@@ -60,7 +60,4 @@ add_subdirectory(src)
 # Examples
 ###############################################################################
 
-if (WITH_DNSSD)
-  add_subdirectory(example/dnssd EXCLUDE_FROM_ALL)
-  add_custom_target(example DEPENDS dnssd-example)
-endif()
+add_subdirectory(example EXCLUDE_FROM_ALL)
