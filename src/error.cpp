@@ -30,6 +30,8 @@ class aware_category
             return "success";
         case daemon_unavailable:
             return "daemon unavailable";
+        case name_in_use:
+            return "name in use";
         }
         return "trial::aware error";
     }

@@ -109,6 +109,9 @@ public:
         case kDNSServiceErr_ServiceNotRunning:
             return condition == aware::make_error_condition(aware::daemon_unavailable);
 
+        case kDNSServiceErr_NameConflict:
+            return condition == aware::make_error_condition(aware::name_in_use);
+
         default:
             return false;
         }

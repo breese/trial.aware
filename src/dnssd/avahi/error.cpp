@@ -45,6 +45,9 @@ class avahi_category
         case AVAHI_ERR_NO_DAEMON:
             return condition == aware::make_error_code(aware::daemon_unavailable);
 
+        case AVAHI_ERR_COLLISION:
+            return condition == aware::make_error_code(aware::name_in_use);
+
         default:
             return false;
         }

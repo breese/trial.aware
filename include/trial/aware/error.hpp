@@ -21,7 +21,8 @@ namespace aware
 enum errc
 {
     success = 0,
-    daemon_unavailable
+    daemon_unavailable, //!< Daemon or system service is not running
+    name_in_use //!< Contact name is used by somebody else
 };
 
 const boost::system::error_category& category();
