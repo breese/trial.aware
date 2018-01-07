@@ -9,6 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <avahi-common/error.h>
+#include <trial/aware/error.hpp>
 #include "dnssd/avahi/error.hpp"
 
 namespace
@@ -31,6 +32,8 @@ class avahi_category
                             const boost::system::error_condition& condition) const noexcept override
     {
         using namespace boost::system;
+        using namespace trial;
+
         switch (value)
         {
         case AVAHI_OK:
@@ -38,6 +41,9 @@ class avahi_category
 
         case AVAHI_ERR_NO_MEMORY:
             return condition == errc::make_error_condition(errc::not_enough_memory);
+
+        case AVAHI_ERR_NO_DAEMON:
+            return condition == aware::make_error_code(aware::daemon_unavailable);
 
         default:
             return false;

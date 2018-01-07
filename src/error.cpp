@@ -28,6 +28,8 @@ class aware_category
         {
         case success:
             return "success";
+        case daemon_unavailable:
+            return "daemon unavailable";
         }
         return "trial::aware error";
     }

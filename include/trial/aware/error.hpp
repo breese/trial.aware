@@ -21,6 +21,7 @@ namespace aware
 enum errc
 {
     success = 0,
+    daemon_unavailable
 };
 
 const boost::system::error_category& category();

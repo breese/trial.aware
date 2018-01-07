@@ -8,6 +8,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <trial/aware/error.hpp>
 #include "dnssd/mdns/dns_sd.hpp"
 #include "dnssd/mdns/error.hpp"
 
@@ -94,13 +95,19 @@ public:
     virtual bool equivalent(int value,
                             const boost::system::error_condition& condition) const noexcept override
     {
+        using namespace boost::system;
+        using namespace trial;
+
         switch (value)
         {
         case kDNSServiceErr_NoError:
             return bool(condition);
 
         case kDNSServiceErr_NoMemory:
-            return condition == boost::system::errc::make_error_condition(boost::system::errc::not_enough_memory);
+            return condition == errc::make_error_condition(errc::not_enough_memory);
+
+        case kDNSServiceErr_ServiceNotRunning:
+            return condition == aware::make_error_condition(aware::daemon_unavailable);
 
         default:
             return false;
