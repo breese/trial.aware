@@ -9,9 +9,9 @@ add_library(aware
   )
 
 target_compile_options(aware PRIVATE ${TRIAL_AWARE_WARNING_FLAGS})
+target_include_directories(aware PUBLIC "${TRIAL_AWARE_ROOT}/include")
+target_include_directories(aware PRIVATE .)
 target_link_libraries(aware Boost::system)
-
-target_include_directories(aware BEFORE PRIVATE .)
 
 ###############################################################################
 # DNS-SD
