@@ -2,16 +2,16 @@
 # Core
 ###############################################################################
 
-add_library(aware
+add_library(trial-aware
   contact.cpp
   error.cpp
   native_socket.cpp
   )
 
-target_compile_options(aware PRIVATE ${TRIAL_AWARE_WARNING_FLAGS})
-target_include_directories(aware PUBLIC "${TRIAL_AWARE_ROOT}/include")
-target_include_directories(aware PRIVATE .)
-target_link_libraries(aware Boost::system)
+target_compile_options(trial-aware PRIVATE ${TRIAL_AWARE_WARNING_FLAGS})
+target_include_directories(trial-aware PUBLIC "${TRIAL_AWARE_ROOT}/include")
+target_include_directories(trial-aware PRIVATE .)
+target_link_libraries(trial-aware Boost::system)
 
 ###############################################################################
 # DNS-SD
@@ -19,7 +19,7 @@ target_link_libraries(aware Boost::system)
 
 if (TARGET PkgConfig::Avahi)
 
-  target_sources(aware PRIVATE
+  target_sources(trial-aware PRIVATE
     dnssd/avahi/announce_socket.cpp
     dnssd/avahi/announcer.cpp
     dnssd/avahi/browser.cpp
@@ -32,11 +32,11 @@ if (TARGET PkgConfig::Avahi)
     dnssd/avahi/utility.cpp
     )
 
-  target_link_libraries(aware PkgConfig::Avahi)
+  target_link_libraries(trial-aware PkgConfig::Avahi)
 
 elseif (TARGET DNSSD::mDNSResponder)
 
-  target_sources(aware PRIVATE
+  target_sources(trial-aware PRIVATE
     dnssd/mdns/announce_socket.cpp
     dnssd/mdns/announcer.cpp
     dnssd/mdns/browser.cpp
@@ -52,6 +52,6 @@ elseif (TARGET DNSSD::mDNSResponder)
     dnssd/mdns/utility.cpp
     )
 
-  target_link_libraries(aware DNSSD::mDNSResponder)
+  target_link_libraries(trial-aware DNSSD::mDNSResponder)
 
 endif()
