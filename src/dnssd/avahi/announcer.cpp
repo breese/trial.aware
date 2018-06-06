@@ -162,33 +162,21 @@ void announcer::async_announce(aware::contact& contact,
         }
     }
 
-    while (true)
+    const int rc = avahi_entry_group_add_service_strlst(ptr,
+                                                        interface_index,
+                                                        protocol,
+                                                        flags,
+                                                        name.c_str(),
+                                                        type.c_str(),
+                                                        domain,
+                                                        host.empty() ? 0 : host.c_str(),
+                                                        contact.port(),
+                                                        properties);
+    if (rc != AVAHI_OK)
     {
-        int rc = avahi_entry_group_add_service_strlst(ptr,
-                                                      interface_index,
-                                                      protocol,
-                                                      flags,
-                                                      name.c_str(),
-                                                      type.c_str(),
-                                                      domain,
-                                                      host.empty() ? 0 : host.c_str(),
-                                                      contact.port(),
-                                                      properties);
-        if (rc == AVAHI_ERR_COLLISION)
-        {
-            char *alternative = avahi_alternative_service_name(name.c_str());
-            name = alternative;
-            avahi_free(alternative);
-        }
-        else if (rc != AVAHI_OK)
-        {
-            handler(avahi::make_error_code(rc));
-            return;
-        }
-        else
-        {
-            break;
-        }
+        // Name collisions are also reported as errors
+        handler(avahi::make_error_code(rc));
+        return;
     }
     commit(ptr);
 }
