@@ -18,7 +18,7 @@ else() # Posix
     find_package(Avahi QUIET)
   endif()
 
-  if (NOT DNSSD_FOUND AND DNSSD_WITH_MDNSRESPONDER)
+  if (NOT DNSSD_FOUND)
     if (NOT DNSSD_WITH_MDNSRESPONDER STREQUAL "")
       set(mDNSResponder_BUILD_DIR ${DNSSD_WITH_MDNSRESPONDER})
     endif()

@@ -12,19 +12,15 @@
 #
 # Defines DNSSD::mDNSResponder imported target
 
-if (mDNSResponder_BUILD_DIR)
-  set(mDNSResponder_INCDIR "${mDNSResponder_BUILD_DIR}/mDNSShared")
-  set(mDNSResponder_LIBDIR "${mDNSResponder_BUILD_DIR}/mDNSPosix/build/prod")
-endif()
-
 find_path(mDNSResponder_INCLUDE_DIR
   NAMES dns_sd.h
-  PATHS "${mDNSResponder_INCDIR}")
+  PATHS "${mDNSResponder_BUILD_DIR}"
+  PATH_SUFFIXES mDNSShared)
 
 find_library(mDNSResponder_LIBRARY
   NAMES dns_sd
-  PATHS "${mDNSResponder_LIBDIR}"
-)
+  PATHS "${mDNSResponder_BUILD_DIR}"
+  PATH_SUFFIXES mDNSPosix/build/prod)
 
 set(mDNSResponder_FOUND FALSE CACHE BOOL "" FORCE)
 if (mDNSResponder_INCLUDE_DIR AND mDNSResponder_LIBRARY)
@@ -75,6 +71,4 @@ mark_as_advanced(
   mDNSResponder_FOUND
   mDNSResponder_VERSION
   mDNSResponder_INCLUDE_DIR
-  mDNSResponder_LIBRARY
-  mDNSResponder_INCDIR
-  mDNSResponder_LIBDIR)
+  mDNSResponder_LIBRARY)
