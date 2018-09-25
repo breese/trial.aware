@@ -32,7 +32,11 @@ boost::asio::ip::address to_address(const sockaddr& addr)
         return ip::address_v4(reinterpret_cast<const ip::address_v4::bytes_type&>(reinterpret_cast<const sockaddr_in&>(addr).sin_addr));
 
     case AF_INET6:
-        return ip::address_v6(reinterpret_cast<const ip::address_v6::bytes_type&>(reinterpret_cast<const sockaddr_in6&>(addr).sin6_addr));
+        {
+            auto& addr6 = reinterpret_cast<const sockaddr_in6&>(addr);
+            return ip::address_v6(reinterpret_cast<const ip::address_v6::bytes_type&>(addr6.sin6_addr),
+                                  addr6.sin6_scope_id);
+        }
 
     default:
         assert(false);
@@ -169,10 +173,7 @@ resolver::resolver(mdns::handle& connection,
 void resolver::on_resolved(const char *host)
 {
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
-    const ::DNSServiceProtocol protocol =
-        (contact.address().is_v6())
-         ? kDNSServiceProtocol_IPv6
-         : kDNSServiceProtocol_IPv4;
+    const ::DNSServiceProtocol protocol = kDNSServiceProtocol_IPv4 | kDNSServiceProtocol_IPv6;
 
     auto ref = connection.get<DNSServiceRef>();
     ::DNSServiceErrorType error = ::DNSServiceGetAddrInfo(&ref,

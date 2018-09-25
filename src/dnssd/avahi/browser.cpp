@@ -25,7 +25,8 @@ namespace aware
 namespace avahi
 {
 
-boost::asio::ip::address to_address(const AvahiAddress& addr)
+boost::asio::ip::address to_address(const AvahiAddress& addr,
+                                    int scope)
 {
     using namespace boost::asio;
     switch (addr.proto)
@@ -34,7 +35,8 @@ boost::asio::ip::address to_address(const AvahiAddress& addr)
         return ip::address_v4(reinterpret_cast<const ip::address_v4::bytes_type&>(addr.data.ipv4.address));
 
     case AVAHI_PROTO_INET6:
-        return ip::address_v6(reinterpret_cast<const ip::address_v6::bytes_type&>(addr.data.ipv6.address));
+        return ip::address_v6(reinterpret_cast<const ip::address_v6::bytes_type&>(addr.data.ipv6.address),
+                              scope);
 
     default:
         assert(false);
@@ -46,12 +48,12 @@ struct browser::wrapper
 {
     static void resolver_callback(
         AvahiServiceResolver *resolver,
-        AvahiIfIndex,
+        AvahiIfIndex index,
         AvahiProtocol,
         AvahiResolverEvent event,
         const char *name,
         const char *full_type,
-        const char * /* domain */,
+        const char *domain,
         const char * /* host_name */,
         const AvahiAddress *address,
         unsigned short port,
@@ -78,7 +80,13 @@ struct browser::wrapper
             }
             // Notify requester
             auto type = avahi::type_decode(full_type);
-            auto contact = aware::contact(type).name(name).address(avahi::to_address(*address)).port(port).properties(properties);
+            auto contact = aware::contact(type)
+                .index(index)
+                .name(name)
+                .domain(domain)
+                .address(avahi::to_address(*address, index))
+                .port(port)
+                .properties(properties);
             self->listener.on_appear(contact);
         }
         else

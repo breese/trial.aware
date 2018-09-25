@@ -21,11 +21,13 @@ class my_monitor
 public:
     my_monitor(boost::asio::io_service& io,
                trial::aware::factory& factory)
-        : socket(factory.make_monitor(io))
+        : contact(""),
+          socket(factory.make_monitor(io))
     {}
 
-    void async_monitor(trial::aware::contact& contact)
+    void async_monitor(const trial::aware::contact& input)
     {
+        contact = input;
         socket->async_monitor(contact,
                               std::bind(&my_monitor::process_monitor,
                                         this,
@@ -41,16 +43,18 @@ private:
         {
             if (contact.empty())
             {
-                std::cout << "Removed:" << std::endl;
-                std::cout << "  type = " << contact.type() << std::endl;
-                std::cout << "  name = " << contact.name() << std::endl;
+                std::cout << "- " << contact.index() << std::endl;
+                std::cout << "  type    = " << contact.type() << std::endl;
+                std::cout << "  name    = " << contact.name() << std::endl;
             }
             else
             {
-                std::cout << "Added:" << std::endl;
-                std::cout << "  type = " << contact.type() << std::endl;
-                std::cout << "  name = " << contact.name() << std::endl;
-                std::cout << "  endpoint = " << contact.address().to_string() << ":" << contact.port() << std::endl;
+                std::cout << "+ " << contact.index() << std::endl;
+                std::cout << "  type    = " << contact.type() << std::endl;
+                std::cout << "  name    = " << contact.name() << std::endl;
+                std::cout << "  domain  = " << contact.domain() << std::endl;
+                std::cout << "  address = " << contact.address().to_string() << std::endl;
+                std::cout << "  port    = " << contact.port() << std::endl;
                 auto properties = contact.properties();
                 for (const auto& property : properties)
                 {
@@ -71,6 +75,7 @@ private:
     }
 
 private:
+    trial::aware::contact contact;
     std::unique_ptr<trial::aware::monitor_socket> socket;
 };
 
@@ -83,10 +88,12 @@ int main(int argc, char *argv[])
     }
     boost::asio::io_service io;
     trial::aware::dnssd::factory factory;
-    my_monitor monitor(io, factory);
+    my_monitor monitor4(io, factory);
+    my_monitor monitor6(io, factory);
 
     trial::aware::contact contact(argv[1]);
-    monitor.async_monitor(contact);
+    monitor4.async_monitor(contact);
+    monitor6.async_monitor(contact.address(boost::asio::ip::address_v6()));
     io.run();
 
     return 0;
