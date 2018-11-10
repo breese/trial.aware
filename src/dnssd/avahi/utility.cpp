@@ -34,7 +34,7 @@ std::string type_decode(const char *type)
     {
         ++beginning;
         ending = std::strchr(beginning, '.');
-        if (ending == 0)
+        if (ending == nullptr)
         {
             ending = beginning;
         }

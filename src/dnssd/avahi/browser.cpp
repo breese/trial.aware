@@ -40,7 +40,7 @@ boost::asio::ip::address to_address(const AvahiAddress& addr,
 
     default:
         assert(false);
-        break;
+        return ip::address_v4();
     }
 }
 
@@ -67,11 +67,11 @@ struct browser::wrapper
         {
             // Convert txt record to property map
             aware::contact::properties_type properties;
-            for (; txt != 0; txt = avahi_string_list_get_next(txt))
+            for (; txt != nullptr; txt = avahi_string_list_get_next(txt))
             {
                 char *key;
                 char *value;
-                if (avahi_string_list_get_pair(txt, &key, &value, 0) == AVAHI_OK)
+                if (avahi_string_list_get_pair(txt, &key, &value, nullptr) == AVAHI_OK)
                 {
                     properties[key] = value;
                     avahi_free(key);
@@ -131,7 +131,7 @@ struct browser::wrapper
                     AvahiLookupFlags(0),
                     wrapper::resolver_callback,
                     userdata);
-                if (!resolver)
+                if (resolver == nullptr)
                 {
                     self->listener.on_failure(avahi::make_error_code(avahi_client_errno(avahi_service_browser_get_client(browser))));
                 }
@@ -173,11 +173,11 @@ browser::browser(const avahi::client& client,
                                     AVAHI_IF_UNSPEC,
                                     protocol,
                                     type.c_str(),
-                                    NULL,
+                                    nullptr,
                                     AvahiLookupFlags(0),
                                     wrapper::browser_callback,
                                     this);
-    if (ptr == 0)
+    if (ptr == nullptr)
         throw boost::system::system_error(avahi::make_error_code(AVAHI_ERR_DISCONNECTED));
 }
 

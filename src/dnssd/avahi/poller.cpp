@@ -127,7 +127,7 @@ AvahiWatch *aware_avahi_watch_new(const AvahiPoll *poll,
                                   AvahiWatchCallback callback,
                                   void *userdata)
 {
-    auto poller = static_cast<const avahi::poller *>(poll);
+    auto poller = reinterpret_cast<const avahi::poller *>(poll);
     return new (std::nothrow) AvahiWatch(poller->get_io_service(), fd, event, callback, userdata);
 }
 
@@ -159,7 +159,7 @@ class avahi_timer;
 // This struct must be in global namespace
 struct AvahiTimeout
 {
-    AvahiTimeout(std::shared_ptr<avahi_timer>);
+    explicit AvahiTimeout(std::shared_ptr<avahi_timer>);
     void update(const struct timeval *);
     void release();
 
@@ -189,12 +189,17 @@ public:
     avahi_timer(boost::asio::io_service& io,
                 AvahiTimeoutCallback callback,
                 void *userdata)
-        : resource(0),
+        : resource(nullptr),
           timer(io),
           callback(callback),
           userdata(userdata)
     {
     }
+
+    avahi_timer(const avahi_timer&) = delete;
+    avahi_timer(avahi_timer&&) = delete;
+    avahi_timer& operator= (const avahi_timer&) = delete;
+    avahi_timer& operator= (avahi_timer&&) = delete;
 
     ~avahi_timer()
     {
@@ -258,7 +263,7 @@ public:
 };
 
 AvahiTimeout::AvahiTimeout(std::shared_ptr<avahi_timer> timer)
-    : timer(timer)
+    : timer(std::move(timer))
 {
 }
 
@@ -279,7 +284,7 @@ AvahiTimeout *aware_avahi_timeout_new(const AvahiPoll *poll,
                                       AvahiTimeoutCallback callback,
                                       void *userdata)
 {
-    auto poller = static_cast<const avahi::poller *>(poll);
+    auto poller = reinterpret_cast<const avahi::poller *>(poll);
     auto timer = avahi_timer::create(poller->get_io_service(), tv, callback, userdata);
     return timer->get_resource();
 }

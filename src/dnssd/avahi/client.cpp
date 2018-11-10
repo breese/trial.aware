@@ -30,7 +30,7 @@ struct client::wrapper
                                 AvahiClientState state,
                                 void *userdata)
     {
-        avahi::client *self = static_cast<avahi::client *>(userdata);
+        auto self = static_cast<avahi::client *>(userdata);
 
         switch (state)
         {
@@ -56,16 +56,16 @@ struct client::wrapper
 };
 
 client::client(avahi::poller& poller)
-    : ptr(0)
+    : ptr(nullptr)
 {
-    const AvahiClientFlags flags = AvahiClientFlags(0);
+    const auto flags = AvahiClientFlags(0);
     // This will trigger the running() callback before ptr is set here
     ptr = avahi_client_new(reinterpret_cast<AvahiPoll *>(&poller),
                            flags,
                            wrapper::client_callback,
                            this,
-                           0);
-    if (ptr == 0)
+                           nullptr);
+    if (ptr == nullptr)
         throw boost::system::system_error(avahi::make_error_code(AVAHI_ERR_DISCONNECTED));
 
     assert(avahi_client_get_state(ptr) == AVAHI_CLIENT_S_RUNNING);
@@ -81,7 +81,7 @@ client::~client()
 
 void client::registering(AvahiClient *client)
 {
-    if (ptr == 0)
+    if (ptr == nullptr)
     {
         // Ignore because we have been called from the constructor
     }
@@ -93,7 +93,7 @@ void client::registering(AvahiClient *client)
 
 void client::connecting(AvahiClient *client)
 {
-    if (ptr == 0)
+    if (ptr == nullptr)
     {
         // Ignore because we have been called from the constructor
     }
@@ -105,7 +105,7 @@ void client::connecting(AvahiClient *client)
 
 void client::running(AvahiClient *client)
 {
-    if (ptr == 0)
+    if (ptr == nullptr)
     {
         // Ignore because we have been called from the constructor
     }
@@ -117,7 +117,7 @@ void client::running(AvahiClient *client)
 
 void client::collision(AvahiClient *client)
 {
-    if (ptr == 0)
+    if (ptr == nullptr)
     {
         // Ignore because we have been called from the constructor
     }
@@ -129,7 +129,7 @@ void client::collision(AvahiClient *client)
 
 void client::failure(AvahiClient *client)
 {
-    if (ptr == 0)
+    if (ptr == nullptr)
     {
         // Ignore because we have been called from the constructor
     }

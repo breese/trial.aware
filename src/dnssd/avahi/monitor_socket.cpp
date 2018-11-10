@@ -47,7 +47,7 @@ public:
     void prepare(aware::contact& contact, handler_type handler)
     {
         contact_pointer = &contact;
-        handlers.push(handler);
+        handlers.push(std::move(handler));
         perform();
     }
 
@@ -63,26 +63,26 @@ public:
         auto& handler = handlers.front();
         *contact_pointer = response.second;
         handler(response.first);
-        contact_pointer = 0;
+        contact_pointer = nullptr;
         responses.pop();
         handlers.pop();
     }
 
-    virtual void on_appear(const aware::contact& contact)
+    virtual void on_appear(const aware::contact& contact) override final
     {
         boost::system::error_code success;
         responses.push(std::make_pair(success, contact));
         perform();
     }
 
-    virtual void on_disappear(const aware::contact& contact)
+    virtual void on_disappear(const aware::contact& contact) override final
     {
         boost::system::error_code success;
         responses.push(std::make_pair(success, contact));
         perform();
     }
 
-    virtual void on_failure(const boost::system::error_code& error)
+    virtual void on_failure(const boost::system::error_code& error) override final
     {
         aware::contact no_contact("");
         responses.push(std::make_pair(error, no_contact));

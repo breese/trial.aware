@@ -70,10 +70,7 @@ struct announcer::wrapper
 class property_list
 {
 public:
-    property_list()
-        : data(0)
-    {
-    }
+    property_list() = default;
 
     ~property_list()
     {
@@ -85,7 +82,7 @@ public:
         for (const auto& property : properties)
         {
             data = avahi_string_list_add_pair(data, property.first.c_str(), property.second.c_str());
-            if (data == 0)
+            if (data == nullptr)
             {
                 break;
             }
@@ -93,13 +90,24 @@ public:
         return *this;
     }
 
-    operator AvahiStringList *()
+    bool empty() const
+    {
+        return data == nullptr;
+    }
+
+    AvahiStringList * get()
     {
         return data;
     }
 
+public:
+    property_list(const property_list&) = delete;
+    property_list(property_list&&) = delete;
+    property_list& operator=(const property_list&) = delete;
+    property_list& operator=(property_list&&) = delete;
+
 private:
-    AvahiStringList *data;
+    AvahiStringList *data {nullptr};
 };
 
 //-----------------------------------------------------------------------------
@@ -107,12 +115,12 @@ private:
 //-----------------------------------------------------------------------------
 
 announcer::announcer(const avahi::client& client)
-    : ptr(0)
+    : ptr(nullptr)
 {
     ptr = avahi_entry_group_new(client,
                                 wrapper::entry_group_callback,
                                 this);
-    if (ptr == 0)
+    if (ptr == nullptr)
         throw boost::system::system_error(avahi::make_error_code(AVAHI_ERR_DISCONNECTED));
 
     assert(avahi_entry_group_get_state(ptr) == AVAHI_ENTRY_GROUP_UNCOMMITED);
@@ -131,31 +139,31 @@ void announcer::async_announce(aware::contact& contact,
 {
     assert(ptr != 0);
 
-    handler = h;
+    handler = std::move(h);
 
-    const AvahiPublishFlags flags = AvahiPublishFlags(0);
+    const auto flags = AvahiPublishFlags(0);
     // Use all network interfaces
     const AvahiIfIndex interface_index = AVAHI_IF_UNSPEC;
     // Use only a specific protocol
-    const AvahiProtocol protocol =
+    const auto protocol =
         contact.address().is_v6()
         ? AVAHI_PROTO_INET6
         : AVAHI_PROTO_INET;
-    auto name = contact.name();
+    const auto& name = contact.name();
     auto type = avahi::type_encode(contact.type());
     // Use .local
-    const char *domain = 0;
+    const char *domain = nullptr;
     // Host name
     const auto& address = contact.address();
     std::string host = address.is_unspecified()
-        ? "" // Use default host name
+        ? std::string() // Use default host name
         : address.to_string();
 
     property_list properties;
     if (!contact.properties().empty())
     {
         properties = contact.properties();
-        if (properties == 0)
+        if (properties.empty())
         {
             handler(avahi::make_error_code(AVAHI_ERR_NO_MEMORY));
             return;
@@ -169,9 +177,9 @@ void announcer::async_announce(aware::contact& contact,
                                                         name.c_str(),
                                                         type.c_str(),
                                                         domain,
-                                                        host.empty() ? 0 : host.c_str(),
+                                                        host.empty() ? nullptr : host.c_str(),
                                                         contact.port(),
-                                                        properties);
+                                                        properties.get());
     if (rc != AVAHI_OK)
     {
         // Name collisions are also reported as errors
@@ -183,7 +191,7 @@ void announcer::async_announce(aware::contact& contact,
 
 void announcer::commit(AvahiEntryGroup *group)
 {
-    assert(group != 0);
+    assert(group != nullptr);
 
     if (!avahi_entry_group_is_empty(group))
     {
