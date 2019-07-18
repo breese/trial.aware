@@ -19,6 +19,8 @@ target_link_libraries(trial-aware Boost::system)
 
 if (TARGET PkgConfig::Avahi)
 
+  find_package(Threads)
+
   target_sources(trial-aware PRIVATE
     dnssd/avahi/announce_socket.cpp
     dnssd/avahi/announcer.cpp
@@ -32,7 +34,7 @@ if (TARGET PkgConfig::Avahi)
     dnssd/avahi/utility.cpp
     )
 
-  target_link_libraries(trial-aware PkgConfig::Avahi)
+  target_link_libraries(trial-aware PkgConfig::Avahi Threads::Threads)
 
 elseif (TARGET DNSSD::mDNSResponder)
 

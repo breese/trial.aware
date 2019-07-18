@@ -22,7 +22,7 @@ endif()
 if (MSVC)
   set(TRIAL_AWARE_WARNING_FLAGS /W3)
 else()
-  set(TRIAL_AWARE_WARNING_FLAGS -Wall -Wextra -pedantic -Werror=return-type -Wnon-virtual-dtor)
+  set(TRIAL_AWARE_WARNING_FLAGS -Wall -Wextra -pedantic -Werror=return-type)
 endif()
 
 find_package(Boost 1.55.0 REQUIRED QUIET COMPONENTS system)

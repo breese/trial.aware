@@ -9,7 +9,7 @@
 ###############################################################################
 
 cmake_minimum_required(VERSION 3.0)
-project(trial.aware)
+project(trial.aware CXX)
 
 add_subdirectory(cmake)
 add_subdirectory(example EXCLUDE_FROM_ALL)

@@ -12,13 +12,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/asio.hpp>
+#include <boost/asio/posix/basic_stream_descriptor.hpp>
 #include <boost/function.hpp>
+
+// Deprecated in 1.66 and removed from 1.70
+#if (BOOST_VERSION < 107000) || defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+# define TRIAL_AWARE_HAVE_STREAM_DESCRIPTOR_SERVICE 1
+#endif
 
 namespace trial
 {
 namespace aware
 {
 
+#if defined(TRIAL_AWARE_HAVE_STREAM_DESCRIPTOR_SERVICE)
 template <typename Service>
 class non_closing_service : public Service
 {
@@ -32,12 +39,17 @@ public:
         // Do not close the file descriptor as we have no ownership of it
     }
 };
+#endif
 
 //! @brief Boost.Asio wrapper for a native socket
 class native_socket
 {
+#if defined(TRIAL_AWARE_HAVE_STREAM_DESCRIPTOR_SERVICE)
     using service_type = non_closing_service<boost::asio::posix::stream_descriptor_service>;
     using socket_type = boost::asio::posix::basic_stream_descriptor<service_type>;
+#else
+    using socket_type = boost::asio::posix::stream_descriptor;
+#endif
 
 public:
     using native_handle_type = socket_type::native_handle_type;
