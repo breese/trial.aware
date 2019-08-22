@@ -9,6 +9,7 @@ add_library(trial-aware
   )
 
 target_compile_options(trial-aware PRIVATE ${TRIAL_AWARE_WARNING_FLAGS})
+target_compile_features(trial-aware PRIVATE ${TRIAL_AWARE_FEATURES})
 target_include_directories(trial-aware PUBLIC "${TRIAL_AWARE_ROOT}/include")
 target_include_directories(trial-aware PRIVATE .)
 target_link_libraries(trial-aware Trial::Net)
