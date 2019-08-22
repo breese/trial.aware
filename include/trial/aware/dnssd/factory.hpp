@@ -26,8 +26,8 @@ class factory
     : public aware::factory
 {
 public:
-    virtual std::unique_ptr<aware::announce_socket> make_announce(boost::asio::io_service&) override;
-    virtual std::unique_ptr<aware::monitor_socket> make_monitor(boost::asio::io_service&) override;
+    virtual std::unique_ptr<aware::announce_socket> make_announce(const net::executor&) override;
+    virtual std::unique_ptr<aware::monitor_socket> make_monitor(const net::executor&) override;
 };
 
 } // namespace dnssd

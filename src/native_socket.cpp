@@ -15,9 +15,9 @@ namespace trial
 namespace aware
 {
 
-native_socket::native_socket(boost::asio::io_service& io,
+native_socket::native_socket(const trial::net::executor& executor,
                              native_handle_type handle)
-    : socket(io, handle)
+    : socket(executor, handle)
 {
 }
 

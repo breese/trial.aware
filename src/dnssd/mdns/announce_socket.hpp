@@ -13,7 +13,7 @@
 
 #include <map>
 #include <memory>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/io_context.hpp>
 #include <trial/aware/announce_socket.hpp>
 #include "native_socket.hpp"
 #include "dnssd/mdns/handle.hpp"
@@ -30,7 +30,7 @@ class announce_socket
     : public aware::announce_socket
 {
 public:
-    announce_socket(boost::asio::io_service&);
+    announce_socket(const net::executor&);
 
     virtual void async_announce(aware::contact& contact,
                                 async_announce_handler) override;
@@ -43,7 +43,7 @@ private:
                 async_announce_handler);
 
 private:
-    boost::asio::io_service& io;
+    net::executor executor;
     mdns::handle connection;
     aware::native_socket socket;
     bool waiting;

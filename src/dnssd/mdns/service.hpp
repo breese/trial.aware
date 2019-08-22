@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <memory>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/io_context.hpp>
 #include "native_socket.hpp"
 #include "dnssd/mdns/handle.hpp"
 
@@ -24,14 +24,14 @@ namespace mdns
 {
 
 class service
-    : public boost::asio::io_service::service
+    : public trial::net::io_context::service
 {
 public:
-    static boost::asio::io_service::id id;
+    static trial::net::io_context::id id;
 
     struct implementation_type {};
 
-    explicit service(boost::asio::io_service& io);
+    explicit service(trial::net::io_context& io);
 
     void construct(implementation_type&) {}
     void destroy(implementation_type&) {}

@@ -34,7 +34,7 @@ class monitor_socket
     using monitor_map = std::map<std::string, monitor_ptr>;
 
 public:
-    monitor_socket(boost::asio::io_service&);
+    monitor_socket(const net::executor&);
 
     virtual void async_monitor(aware::contact&,
                                async_monitor_handler) override;

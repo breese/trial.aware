@@ -38,4 +38,5 @@ if (WITH_DNSSD)
   endif()
 endif()
 
+add_subdirectory("${TRIAL_AWARE_ROOT}/external" "${TRIAL_AWARE_BUILD_DIR}/external")
 add_subdirectory("${TRIAL_AWARE_ROOT}/src" "${TRIAL_AWARE_BUILD_DIR}/src")

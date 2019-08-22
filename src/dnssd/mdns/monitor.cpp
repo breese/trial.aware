@@ -29,9 +29,9 @@ namespace mdns
 // monitor
 //-----------------------------------------------------------------------------
 
-monitor::monitor(boost::asio::io_service& io,
+monitor::monitor(const net::executor& executor,
                  mdns::handle& connection)
-    : io(io),
+    : executor(executor),
       connection(connection)
 {
 }
@@ -75,7 +75,7 @@ void monitor::on_browser_appear(const aware::contact& contact,
         entry = scopes.insert(
             entry,
             std::make_pair(contact.name(),
-                           std::make_shared<scope>(std::ref(io), std::ref(*this))));
+                           std::make_shared<scope>(executor, std::ref(*this))));
     }
     entry->second->submit_appear(contact);
 
@@ -198,10 +198,10 @@ monitor::request::request(aware::contact& contact,
 // monitor::scope
 //-----------------------------------------------------------------------------
 
-monitor::scope::scope(boost::asio::io_service& io,
+monitor::scope::scope(const net::executor& executor,
                       monitor& self)
     : self(self),
-      timer(io),
+      timer(executor),
       wildcard_count(0)
 {
 }

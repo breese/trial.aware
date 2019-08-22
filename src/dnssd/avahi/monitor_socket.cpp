@@ -33,17 +33,17 @@ class monitor
     using handler_type = aware::monitor_socket::async_monitor_handler;
 
 public:
-    monitor(boost::asio::io_service& io,
+    monitor(const net::executor& executor,
             aware::contact& contact)
         : contact_pointer(&contact)
     {
         browser = std::make_shared<avahi::browser>(
-            boost::asio::use_service<avahi::service>(io).client(),
+            boost::asio::use_service<avahi::service>(static_cast<net::io_context&>(executor.context())).client(),
             contact,
             std::ref(*this));
     }
 
-    //! @pre Must be called from an io_service thread
+    //! @pre Must be called from the executor thread
     void prepare(aware::contact& contact, handler_type handler)
     {
         contact_pointer = &contact;
@@ -51,7 +51,7 @@ public:
         perform();
     }
 
-    //! @pre Must be called from an io_service thread
+    //! @pre Must be called from the executor thread
     void perform()
     {
         if (responses.empty())
@@ -98,17 +98,18 @@ private:
 
 } // namespace detail
 
-monitor_socket::monitor_socket(boost::asio::io_service& io)
-    : boost::asio::basic_io_object<avahi::service>(io)
+monitor_socket::monitor_socket(const trial::net::executor& executor)
+    : boost::asio::basic_io_object<avahi::service>(static_cast<net::io_context&>(executor.context()))
 {
 }
 
 void monitor_socket::async_monitor(aware::contact& contact,
                                    async_monitor_handler handler)
 {
-    // Perform from io_service thread because the constructor of
+    // Perform from executor thread because the constructor of
     // detail::browser will invoke the first callback
-    get_io_service().post(
+    net::post(
+        net::extension::get_executor(*this),
         [this, &contact, handler]
         {
             const auto& key = contact.type();
@@ -120,7 +121,7 @@ void monitor_socket::async_monitor(aware::contact& contact,
                     monitor_map::value_type(
                         key,
                         std::make_shared<avahi::detail::monitor>(
-                            std::ref(get_io_service()),
+                            net::extension::get_executor(*this),
                             std::ref(contact))));
             }
             assert(where != monitors.end());

@@ -17,11 +17,11 @@ namespace aware
 namespace avahi
 {
 
-boost::asio::io_service::id service::id;
+trial::net::io_context::id service::id;
 
-service::service(boost::asio::io_service& io)
-    : boost::asio::io_service::service(io),
-      current_poller(io),
+service::service(trial::net::io_context& io)
+    : net::io_context::service(io),
+      current_poller(net::extension::get_executor(io)),
       current_client(current_poller)
 {
 }

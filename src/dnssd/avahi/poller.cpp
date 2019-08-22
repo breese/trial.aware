@@ -13,7 +13,7 @@
 #include <memory>
 #include <chrono>
 #include <utility>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/io_context.hpp>
 #include <avahi-common/timeval.h>
 #include "native_socket.hpp"
 #include "dnssd/avahi/poller.hpp"
@@ -27,12 +27,12 @@ using namespace trial::aware;
 // This struct must be in global namespace
 struct AvahiWatch
 {
-    AvahiWatch(boost::asio::io_service& io,
+    AvahiWatch(const trial::net::executor& executor,
                int fd,
                AvahiWatchEvent event,
                AvahiWatchCallback callback,
                void *userdata)
-        : socket(io, fd),
+        : socket(executor, fd),
           callback(callback),
           userdata(userdata),
           revents(AvahiWatchEvent(0))
@@ -128,7 +128,7 @@ AvahiWatch *aware_avahi_watch_new(const AvahiPoll *poll,
                                   void *userdata)
 {
     auto poller = reinterpret_cast<const avahi::poller *>(poll);
-    return new (std::nothrow) AvahiWatch(poller->get_io_service(), fd, event, callback, userdata);
+    return new (std::nothrow) AvahiWatch(poller->get_executor(), fd, event, callback, userdata);
 }
 
 extern "C"
@@ -172,12 +172,12 @@ struct AvahiTimeout
 class avahi_timer : public std::enable_shared_from_this<avahi_timer>
 {
 public:
-    static std::shared_ptr<avahi_timer> create(boost::asio::io_service& io,
+    static std::shared_ptr<avahi_timer> create(const trial::net::executor& executor,
                                                const struct timeval *tv,
                                                AvahiTimeoutCallback callback,
                                                void *userdata)
     {
-        auto result = std::make_shared<avahi_timer>(io, callback, userdata);
+        auto result = std::make_shared<avahi_timer>(executor, callback, userdata);
         if (tv)
         {
             result->update(tv);
@@ -186,11 +186,11 @@ public:
         return result;
     }
 
-    avahi_timer(boost::asio::io_service& io,
+    avahi_timer(const trial::net::executor& executor,
                 AvahiTimeoutCallback callback,
                 void *userdata)
         : resource(nullptr),
-          timer(io),
+          timer(executor),
           callback(callback),
           userdata(userdata)
     {
@@ -285,7 +285,7 @@ AvahiTimeout *aware_avahi_timeout_new(const AvahiPoll *poll,
                                       void *userdata)
 {
     auto poller = reinterpret_cast<const avahi::poller *>(poll);
-    auto timer = avahi_timer::create(poller->get_io_service(), tv, callback, userdata);
+    auto timer = avahi_timer::create(poller->get_executor(), tv, callback, userdata);
     return timer->get_resource();
 }
 
@@ -313,8 +313,8 @@ namespace aware
 namespace avahi
 {
 
-poller::poller(boost::asio::io_service& io)
-    : io(io)
+poller::poller(const trial::net::executor& executor)
+    : executor(executor)
 {
     userdata = this;
     watch_new = &aware_avahi_watch_new;
@@ -326,9 +326,9 @@ poller::poller(boost::asio::io_service& io)
     timeout_free = &aware_avahi_timeout_free;
 }
 
-boost::asio::io_service& poller::get_io_service() const
+trial::net::executor poller::get_executor() const
 {
-    return io;
+    return executor;
 }
 
 } // namespace avahi

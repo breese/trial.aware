@@ -19,14 +19,14 @@ namespace aware
 namespace dnssd
 {
 
-std::unique_ptr<aware::announce_socket> factory::make_announce(boost::asio::io_service& io)
+std::unique_ptr<aware::announce_socket> factory::make_announce(const net::executor& executor)
 {
-    return std::unique_ptr<avahi::announce_socket>(new avahi::announce_socket(io));
+    return std::unique_ptr<avahi::announce_socket>(new avahi::announce_socket(executor));
 }
 
-std::unique_ptr<aware::monitor_socket> factory::make_monitor(boost::asio::io_service& io)
+std::unique_ptr<aware::monitor_socket> factory::make_monitor(const net::executor& executor)
 {
-    return std::unique_ptr<avahi::monitor_socket>(new avahi::monitor_socket(io));
+    return std::unique_ptr<avahi::monitor_socket>(new avahi::monitor_socket(executor));
 }
 
 } // namespace dnssd

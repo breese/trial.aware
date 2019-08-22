@@ -22,10 +22,10 @@ namespace aware
 namespace mdns
 {
 
-monitor_socket::monitor_socket(boost::asio::io_service& io)
-    : io(io),
+monitor_socket::monitor_socket(const net::executor& executor)
+    : executor(executor),
       connection(mdns::handle::with_connection),
-      socket(io, connection.native_handle()),
+      socket(executor, connection.native_handle()),
       waiting(false)
 {
 }
@@ -44,10 +44,12 @@ void monitor_socket::async_monitor(aware::contact& contact,
     }
     if (permanent_error)
     {
-        io.post(std::bind(&monitor_socket::invoke,
-                          this,
-                          permanent_error,
-                          handler));
+        net::post(
+            executor,
+            std::bind(&monitor_socket::invoke,
+                      this,
+                      permanent_error,
+                      handler));
         return;
     }
 
@@ -60,7 +62,7 @@ void monitor_socket::async_monitor(aware::contact& contact,
             where = monitors.insert(
                 where,
                 std::make_pair(key,
-                               std::make_shared<mdns::monitor>(std::ref(io),
+                               std::make_shared<mdns::monitor>(executor,
                                                                std::ref(connection))));
         }
         assert(where != monitors.end());
@@ -76,10 +78,12 @@ void monitor_socket::async_monitor(aware::contact& contact,
     }
     catch (const boost::system::system_error& ex)
     {
-        io.post(std::bind(&monitor_socket::invoke,
-                          this,
-                          ex.code(),
-                          handler));
+        net::post(
+            executor,
+            std::bind(&monitor_socket::invoke,
+                      this,
+                      ex.code(),
+                      handler));
     }
     // Other exceptions are propagated outwards
 }

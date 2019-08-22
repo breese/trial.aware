@@ -17,7 +17,7 @@
 #include <map>
 #include <chrono>
 #include <boost/optional.hpp>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/executor.hpp>
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <trial/aware/contact.hpp>
 #include <trial/aware/monitor_socket.hpp>
@@ -51,7 +51,7 @@ class monitor
 public:
     using async_monitor_handler = typename aware::monitor_socket::async_monitor_handler;
 
-    monitor(boost::asio::io_service&, mdns::handle&);
+    monitor(const net::executor&, mdns::handle&);
 
     void listen(aware::contact&, async_monitor_handler);
 
@@ -65,7 +65,7 @@ private:
     virtual void on_resolver_failure(const boost::system::error_code&) override;
 
 private:
-    boost::asio::io_service& io;
+    net::executor executor;
     mdns::handle& connection;
     std::string type;
     boost::optional<mdns::browser> browser;
@@ -87,7 +87,7 @@ private:
         using addition_container = std::set<aware::contact>;
         using removal_container = std::multiset<aware::contact>;
 
-        scope(boost::asio::io_service&, monitor&);
+        scope(const net::executor&, monitor&);
         ~scope();
 
         void submit_appear(const aware::contact&);

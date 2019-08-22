@@ -14,7 +14,7 @@
 #include <memory>
 #include <map>
 #include <boost/system/error_code.hpp>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/io_context.hpp>
 #include <trial/aware/monitor_socket.hpp>
 #include "native_socket.hpp"
 #include "dnssd/mdns/handle.hpp"
@@ -31,7 +31,7 @@ class monitor_socket
     : public aware::monitor_socket
 {
 public:
-    monitor_socket(boost::asio::io_service&);
+    monitor_socket(const net::executor&);
     ~monitor_socket();
 
     virtual void async_monitor(aware::contact&,
@@ -45,7 +45,7 @@ private:
                 async_monitor_handler);
 
 private:
-    boost::asio::io_service& io;
+    net::executor executor;
     mdns::handle connection;
     aware::native_socket socket;
     bool waiting;

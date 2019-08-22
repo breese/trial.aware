@@ -12,6 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <boost/asio/basic_io_object.hpp>
+#include <trial/net/io_context.hpp>
 #include <trial/aware/announce_socket.hpp>
 #include "dnssd/avahi/service.hpp"
 #include "dnssd/avahi/announcer.hpp"
@@ -28,7 +29,7 @@ class announce_socket
       public boost::asio::basic_io_object<avahi::service>
 {
 public:
-    announce_socket(boost::asio::io_service&);
+    announce_socket(const trial::net::executor&);
 
     virtual void async_announce(aware::contact&,
                                 async_announce_handler) override;

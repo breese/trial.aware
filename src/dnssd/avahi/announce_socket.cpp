@@ -17,9 +17,9 @@ namespace aware
 namespace avahi
 {
 
-announce_socket::announce_socket(boost::asio::io_service& io)
-    : boost::asio::basic_io_object<avahi::service>(io),
-      announcer(boost::asio::use_service<avahi::service>(io).client())
+announce_socket::announce_socket(const trial::net::executor& executor)
+    : boost::asio::basic_io_object<avahi::service>(static_cast<net::io_context&>(executor.context())),
+      announcer(boost::asio::use_service<avahi::service>(static_cast<net::io_context&>(executor.context())).client())
 {
 }
 

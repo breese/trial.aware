@@ -2,7 +2,7 @@
 #define TRIAL_AWARE_FACTORY_HPP
 
 #include <memory>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/executor.hpp>
 #include <trial/aware/announce_socket.hpp>
 #include <trial/aware/monitor_socket.hpp>
 
@@ -16,8 +16,8 @@ class factory
 public:
     virtual ~factory() = default;
 
-    virtual std::unique_ptr<announce_socket> make_announce(boost::asio::io_service&) = 0;
-    virtual std::unique_ptr<monitor_socket> make_monitor(boost::asio::io_service&) = 0;
+    virtual std::unique_ptr<announce_socket> make_announce(const net::executor&) = 0;
+    virtual std::unique_ptr<monitor_socket> make_monitor(const net::executor&) = 0;
 };
 
 } // namespace aware

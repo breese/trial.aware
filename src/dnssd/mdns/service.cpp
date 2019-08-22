@@ -18,10 +18,10 @@ namespace aware
 namespace mdns
 {
 
-boost::asio::io_service::id service::id;
+trial::net::io_context::id service::id;
 
-service::service(boost::asio::io_service& io)
-    : boost::asio::io_service::service(io),
+service::service(trial::net::io_context& io)
+    : trial::net::io_context::service(io),
       connection(mdns::handle::with_connection)
 {
 }

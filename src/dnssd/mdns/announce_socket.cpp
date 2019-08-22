@@ -23,10 +23,10 @@ namespace aware
 namespace mdns
 {
 
-announce_socket::announce_socket(boost::asio::io_service& io)
-    : io(io),
+announce_socket::announce_socket(const net::executor& executor)
+    : executor(executor),
       connection(mdns::handle::with_connection),
-      socket(io, connection.native_handle()),
+      socket(executor, connection.native_handle()),
       waiting(false)
 {
 }
@@ -38,10 +38,12 @@ void announce_socket::async_announce(aware::contact& contact,
     {
         using namespace boost::system;
         auto irrecoverable = errc::make_error_code(errc::state_not_recoverable);
-        io.post(std::bind(&announce_socket::invoke,
-                          this,
-                          irrecoverable,
-                          handler));
+        net::post(
+            executor,
+            std::bind(&announce_socket::invoke,
+                      this,
+                      irrecoverable,
+                      handler));
         return;
     }
 
@@ -70,10 +72,12 @@ void announce_socket::async_announce(aware::contact& contact,
     }
     catch (const boost::system::system_error& ex)
     {
-        io.post(std::bind(&announce_socket::invoke,
-                          this,
-                          ex.code(),
-                          handler));
+        net::post(
+            executor,
+            std::bind(&announce_socket::invoke,
+                      this,
+                      ex.code(),
+                      handler));
     }
     // Other exceptions are propagated outwards
 }

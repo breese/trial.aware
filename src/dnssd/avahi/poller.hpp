@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <avahi-common/watch.h>
-#include <boost/asio/io_service.hpp>
+#include <trial/net/executor.hpp>
 
 namespace trial
 {
@@ -25,12 +25,12 @@ class poller
     : public ::AvahiPoll
 {
 public:
-    poller(boost::asio::io_service&);
+    poller(const trial::net::executor&);
 
-    boost::asio::io_service& get_io_service() const;
+    trial::net::executor get_executor() const;
 
 private:
-    boost::asio::io_service& io;
+    trial::net::executor executor;
 };
 
 } // namespace avahi

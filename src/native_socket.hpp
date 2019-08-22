@@ -13,6 +13,8 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/posix/basic_stream_descriptor.hpp>
+#include <trial/net/executor.hpp>
+#include <trial/net/io_context.hpp>
 #include <boost/function.hpp>
 
 // Deprecated in 1.66 and removed from 1.70
@@ -30,7 +32,7 @@ template <typename Service>
 class non_closing_service : public Service
 {
 public:
-    non_closing_service(boost::asio::io_service& io)
+    non_closing_service(net::io_context& io)
         : Service(io)
     {}
 
@@ -54,7 +56,7 @@ class native_socket
 public:
     using native_handle_type = socket_type::native_handle_type;
 
-    native_socket(boost::asio::io_service&, native_handle_type);
+    native_socket(const trial::net::executor&, native_handle_type);
     ~native_socket();
 
     template <typename Handler>
