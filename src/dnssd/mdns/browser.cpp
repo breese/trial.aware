@@ -53,16 +53,16 @@ struct browser::callback
                 const bool commit = !(flags & kDNSServiceFlagsMoreComing);
                 if (flags & kDNSServiceFlagsAdd)
                 {
-                    self->listener.on_browser_appear(contact, commit);
+                    self->member.listener.on_browser_appear(contact, commit);
                 }
                 else
                 {
-                    self->listener.on_browser_disappear(contact, commit);
+                    self->member.listener.on_browser_disappear(contact, commit);
                 }
             }
             else
             {
-                self->listener.on_browser_failure(mdns::make_error_code(error));
+                self->member.listener.on_browser_failure(mdns::make_error_code(error));
             }
         }
         catch (...)
@@ -79,8 +79,7 @@ struct browser::callback
 browser::browser(const std::string& type,
                  mdns::handle& connection,
                  typename browser::listener& listener)
-    : connection(connection),
-      listener(listener)
+    : member{ connection, listener, {} }
 {
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
     std::string regtype = mdns::type_encode(type);
@@ -98,7 +97,7 @@ browser::browser(const std::string& type,
         this);
     throw_on_error(error);
 
-    handle.reset(ref);
+    member.handle.reset(ref);
 }
 
 } // namespace mdns

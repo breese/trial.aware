@@ -87,20 +87,20 @@ struct resolver::callback
                     }
                 }
 
-                self->contact.index(to_index(interface_index));
-                self->contact.properties(properties);
+                self->member.contact.index(to_index(interface_index));
+                self->member.contact.properties(properties);
                 // FIXME: Set port directly on contact?
-                self->port = boost::asio::detail::socket_ops::network_to_host_short(port);
+                self->member.port = boost::asio::detail::socket_ops::network_to_host_short(port);
                 self->on_resolved(host);
             }
             else
             {
-                self->listener.on_resolver_failure(mdns::make_error_code(error));
+                self->member.listener.on_resolver_failure(mdns::make_error_code(error));
             }
         }
         catch (const boost::system::system_error& ex)
         {
-            self->listener.on_resolver_failure(ex.code());
+            self->member.listener.on_resolver_failure(ex.code());
         }
         catch (...)
         {
@@ -125,13 +125,13 @@ struct resolver::callback
             if (error == kDNSServiceErr_NoError)
             {
                 const bool more = flags & kDNSServiceFlagsMoreComing;
-                self->contact.address(mdns::to_address(*address));
-                self->contact.port(self->port);
+                self->member.contact.address(mdns::to_address(*address));
+                self->member.contact.port(self->member.port);
                 self->on_addrinfo(more);
             }
             else
             {
-                self->listener.on_resolver_failure(mdns::make_error_code(error));
+                self->member.listener.on_resolver_failure(mdns::make_error_code(error));
             }
         }
         catch (...)
@@ -148,10 +148,7 @@ struct resolver::callback
 resolver::resolver(mdns::handle& connection,
                    const aware::contact& contact,
                    typename resolver::listener& listener)
-    : connection(connection),
-      listener(listener),
-      contact(contact),
-      port(0)
+    : member{ connection, listener, {}, contact, 0 }
 {
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
     auto regtype = mdns::type_encode(contact.type());
@@ -167,7 +164,7 @@ resolver::resolver(mdns::handle& connection,
                                                       this);
     throw_on_error(error);
 
-    handle.reset(ref);
+    member.handle.reset(ref);
 }
 
 void resolver::on_resolved(const char *host)
@@ -175,26 +172,26 @@ void resolver::on_resolved(const char *host)
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
     const ::DNSServiceProtocol protocol = kDNSServiceProtocol_IPv4 | kDNSServiceProtocol_IPv6;
 
-    auto ref = connection.get<DNSServiceRef>();
+    auto ref = member.connection.get<DNSServiceRef>();
     ::DNSServiceErrorType error = ::DNSServiceGetAddrInfo(&ref,
                                                           flags,
-                                                          from_index(contact.index()),
+                                                          from_index(member.contact.index()),
                                                           protocol,
                                                           host,
                                                           &resolver::callback::on_addrinfo,
                                                           this);
     throw_on_error(error);
 
-    handle.reset(ref);
+    member.handle.reset(ref);
 }
 
 void resolver::on_addrinfo(bool more)
 {
     if (!more)
     {
-        handle.reset();
+        member.handle.reset();
     }
-    listener.on_resolver_done(contact);
+    member.listener.on_resolver_done(member.contact);
 }
 
 } // namespace mdns

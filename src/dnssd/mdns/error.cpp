@@ -18,11 +18,11 @@ namespace
 class mdns_category : public boost::system::error_category
 {
 public:
-    const char *name() const BOOST_SYSTEM_NOEXCEPT
+    const char *name() const noexcept override
     {
         return "mDNSResponder";
     }
-    std::string message(int value) const
+    std::string message(int value) const override
     {
         switch (DNSServiceErrorType(value))
         {

@@ -46,10 +46,12 @@ public:
 
 private:
     struct callback;
-
-    mdns::handle& connection;
-    browser::listener& listener;
-    mdns::handle handle;
+    struct
+    {
+        mdns::handle& connection;
+        browser::listener& listener;
+        mdns::handle handle;
+    } member;
 };
 
 } // namespace mdns

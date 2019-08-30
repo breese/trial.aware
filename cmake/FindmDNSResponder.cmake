@@ -21,6 +21,10 @@ find_library(mDNSResponder_LIBRARY
   NAMES dns_sd
   PATHS "${mDNSResponder_BUILD_DIR}"
   PATH_SUFFIXES mDNSPosix/build/prod)
+if (NOT mDNSResponder_LIBRARY)
+   find_library(mDNSResponder_LIBRARY
+	NAMES dns_services)
+endif()
 
 set(mDNSResponder_FOUND FALSE CACHE BOOL "" FORCE)
 if (mDNSResponder_INCLUDE_DIR AND mDNSResponder_LIBRARY)

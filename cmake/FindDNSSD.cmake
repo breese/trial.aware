@@ -6,9 +6,7 @@ option(DNSSD_WITH_AVAHI "Check for Avahi" ON)
 set(DNSSD_WITH_MDNSRESPONDER "" CACHE PATH "Check for mDNSResponder using build directory")
 
 if (APPLE)
-  # Included in libSystem
-  set(DNSSD_FOUND TRUE)
-  # FIXME: Create library alias instead
+  find_package(mDNSResponder)
 
 elseif(WIN32)
   # FIXME

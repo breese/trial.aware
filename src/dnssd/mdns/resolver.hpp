@@ -45,11 +45,14 @@ private:
 private:
     struct callback;
 
-    mdns::handle& connection;
-    resolver::listener& listener;
-    mdns::handle handle;
-    aware::contact contact;
-    unsigned short port;
+    struct
+    {
+        mdns::handle& connection;
+        resolver::listener& listener;
+        mdns::handle handle;
+        aware::contact contact;
+        unsigned short port;
+    } member;
 };
 
 } // namespace mdns
