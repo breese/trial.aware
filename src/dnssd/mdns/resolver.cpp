@@ -40,7 +40,7 @@ boost::asio::ip::address to_address(const sockaddr& addr)
 
     default:
         assert(false);
-        break;
+        return ip::address_v4();
     }
 }
 
