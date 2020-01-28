@@ -12,7 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <memory>
-#include <boost/optional.hpp>
 #include <trial/aware/contact.hpp>
 #include <trial/aware/announce_socket.hpp>
 #include "dnssd/mdns/handle.hpp"
@@ -52,7 +51,7 @@ private:
         std::shared_ptr<mdns::properties> properties;
         async_announce_handler handler;
     };
-    boost::optional<current_type> current;
+    std::unique_ptr<current_type> current;
 };
 
 } // namespace mdns

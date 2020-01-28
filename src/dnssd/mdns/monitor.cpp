@@ -12,7 +12,6 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
-#include <boost/utility/in_place_factory.hpp>
 #include "dnssd/mdns/dns_sd.hpp"
 #include "dnssd/mdns/error.hpp"
 #include "dnssd/mdns/throw_on_error.hpp"
@@ -49,9 +48,9 @@ void monitor::listen(aware::contact& contact,
     {
         type = contact.type();
         // Browser will continously trigger announcements via its listener
-        browser = boost::in_place(contact.type(),
-                                  std::ref(connection),
-                                  std::ref(*this));
+        browser.reset(new mdns::browser(contact.type(),
+                                        std::ref(connection),
+                                        std::ref(*this)));
     }
     assert(contact.type() == type);
 

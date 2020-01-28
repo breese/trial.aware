@@ -15,7 +15,6 @@
 #include <boost/asio/posix/basic_stream_descriptor.hpp>
 #include <trial/net/executor.hpp>
 #include <trial/net/io_context.hpp>
-#include <boost/function.hpp>
 
 // Deprecated in 1.66 and removed from 1.70
 #if (BOOST_VERSION < 107000) || defined(BOOST_ASIO_ENABLE_OLD_SERVICES)

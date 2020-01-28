@@ -13,7 +13,6 @@
 #include <memory>
 #include <functional>
 #include <boost/asio/placeholders.hpp>
-#include <boost/utility/in_place_factory.hpp>
 #include "dnssd/mdns/dns_sd.hpp"
 #include "dnssd/mdns/error.hpp"
 #include "dnssd/mdns/throw_on_error.hpp"
@@ -52,26 +51,26 @@ struct announcer::callback
                     self->current->contact = aware::contact(mdns::type_decode(regtype))
                         .name(name);
                     self->current->handler(mdns::make_error_code(kDNSServiceErr_NoError));
-                    self->current = boost::none;
+                    self->current = nullptr;
                 }
                 else
                 {
                     // Name conflicts not implemented yet
                     self->current->handler(mdns::make_error_code(kDNSServiceErr_NameConflict));
-                    self->current = boost::none;
+                    self->current = nullptr;
                 }
             }
             else
             {
                 assert(self->current);
                 self->current->handler(mdns::make_error_code(error));
-                self->current = boost::none;
+                self->current = nullptr;
             }
         }
         catch (const boost::system::system_error& ex)
         {
             self->current->handler(ex.code());
-            self->current = boost::none;
+            self->current = nullptr;
         }
         catch (...)
         {
@@ -94,7 +93,7 @@ void announcer::announce(aware::contact& contact,
     }
 
     // This operation will be completed when data is ready and process() is called
-    current = boost::in_place(std::ref(contact), handler);
+    current.reset(new current_type(std::ref(contact), handler));
 
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection | kDNSServiceFlagsNoAutoRename;
     const uint32_t interface_index = from_index(contact.index());

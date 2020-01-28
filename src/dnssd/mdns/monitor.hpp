@@ -16,7 +16,6 @@
 #include <set>
 #include <map>
 #include <chrono>
-#include <boost/optional.hpp>
 #include <trial/net/executor.hpp>
 #include <boost/asio/basic_waitable_timer.hpp>
 #include <trial/aware/contact.hpp>
@@ -68,7 +67,7 @@ private:
     net::executor executor;
     mdns::handle& connection;
     std::string type;
-    boost::optional<mdns::browser> browser;
+    std::unique_ptr<mdns::browser> browser;
     boost::system::error_code permanent_error;
 
     struct request
