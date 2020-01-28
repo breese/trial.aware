@@ -50,6 +50,8 @@ struct browser::callback
                     .name(name)
                     .domain(domain)
                     .index(to_index(interface_index));
+                if (self->member.protocol == mdns::protocol::ipv6)
+                    contact = contact.address(boost::asio::ip::address_v6());
                 const bool commit = !(flags & kDNSServiceFlagsMoreComing);
                 if (flags & kDNSServiceFlagsAdd)
                 {
@@ -77,9 +79,10 @@ struct browser::callback
 //-----------------------------------------------------------------------------
 
 browser::browser(const std::string& type,
+                 mdns::protocol protocol,
                  mdns::handle& connection,
                  typename browser::listener& listener)
-    : member{ connection, listener, {} }
+    : member{ connection, listener, {}, protocol }
 {
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
     std::string regtype = mdns::type_encode(type);

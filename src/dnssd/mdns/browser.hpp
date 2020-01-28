@@ -23,6 +23,12 @@ namespace aware
 namespace mdns
 {
 
+enum struct protocol
+{
+    ipv4,
+    ipv6
+};
+
 class browser
 {
     using identifier_type = void *;
@@ -41,6 +47,7 @@ public:
     };
 
     browser(const std::string& type,
+            mdns::protocol,
             mdns::handle&,
             browser::listener&);
 
@@ -51,6 +58,7 @@ private:
         mdns::handle& connection;
         browser::listener& listener;
         mdns::handle handle;
+        mdns::protocol protocol;
     } member;
 };
 

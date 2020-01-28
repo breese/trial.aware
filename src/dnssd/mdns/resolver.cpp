@@ -170,7 +170,7 @@ resolver::resolver(mdns::handle& connection,
 void resolver::on_resolved(const char *host)
 {
     const ::DNSServiceFlags flags = kDNSServiceFlagsShareConnection;
-    const ::DNSServiceProtocol protocol = kDNSServiceProtocol_IPv4 | kDNSServiceProtocol_IPv6;
+    const ::DNSServiceProtocol protocol = member.contact.address().is_v6() ? kDNSServiceProtocol_IPv6 : kDNSServiceProtocol_IPv4;
 
     auto ref = member.connection.get<DNSServiceRef>();
     ::DNSServiceErrorType error = ::DNSServiceGetAddrInfo(&ref,

@@ -47,8 +47,10 @@ void monitor::listen(aware::contact& contact,
     if (!browser)
     {
         type = contact.type();
+        auto protocol = contact.address().is_v6() ? mdns::protocol::ipv6 : mdns::protocol::ipv4;
         // Browser will continously trigger announcements via its listener
-        browser.reset(new mdns::browser(contact.type(),
+        browser.reset(new mdns::browser(type,
+                                        protocol,
                                         std::ref(connection),
                                         std::ref(*this)));
     }
