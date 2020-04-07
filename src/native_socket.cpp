@@ -17,7 +17,7 @@ namespace aware
 
 native_socket::native_socket(const trial::net::executor& executor,
                              native_handle_type handle)
-    : socket(executor, handle)
+    : socket(trial::net::extension::get_executor(executor), handle)
 {
 }
 

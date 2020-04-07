@@ -17,7 +17,7 @@
 #include <trial/net/io_context.hpp>
 
 // Deprecated in 1.66 and removed from 1.70
-#if (BOOST_VERSION < 107000) || defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
+#if (BOOST_VERSION < 106700) || defined(BOOST_ASIO_ENABLE_OLD_SERVICES)
 # define TRIAL_AWARE_HAVE_STREAM_DESCRIPTOR_SERVICE 1
 #endif
 
